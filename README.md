@@ -39,3 +39,23 @@ terraform plan -var-file=terraform.tfvars
 ```bash
 terraform apply -var-file=terraform.tfvars
 ```
+
+## 2. Test the deployed infrastructure
+
+### 2.1 Ingest data
+
+```bash
+curl -m 310 -X POST https://<fn_ingest_data_url> -H "Authorization: bearer $(gcloud auth print-identity-token)" -H "Content-Type: application/json" -d '{
+    "product_id": "12345",
+    "product_name": "Laptop",
+    "category": "Electronics",
+    "unit_price": 999.99,
+    "supplier": "TechSupplier Inc."
+}'
+```
+
+### 2.2 Query data
+
+```bash
+<TODO>
+```
