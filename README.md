@@ -1,1 +1,41 @@
 # latam-challenge
+
+## Setup
+
+Apis to be enabled:
+
+- Billing API
+- Cloud Functions API
+- Pub/Sub API
+- Bigquery API
+- IAM API
+
+## 1. Deploy infrastructure
+
+### 1.1 Initialization
+
+> **Constraint:** tested using Terraform v1.8.1
+
+```bash
+cd infra
+terraform init
+```
+
+Create a new file called terraform.tfvars with the following information:
+
+```md
+project_id=<YOUR_GCP_PROJECT_ID>
+region=<YOUR_GCP_REGION>
+```
+
+### 1.2 Plan
+
+```bash
+terraform plan -var-file=terraform.tfvars
+```
+
+### 1.3 Apply
+
+```bash
+terraform apply -var-file=terraform.tfvars
+```
