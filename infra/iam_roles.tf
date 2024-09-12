@@ -14,12 +14,18 @@ resource "google_project_iam_member" "data_engineering_pubsub" {
 
 resource "google_project_iam_member" "data_engineering_bigquery" {
   project = var.project_id
-  role    = "roles/bigquery.dataEditor"
+  role    = "roles/bigquery.user"
   member  = "serviceAccount:${google_service_account.data_engineering.email}"
 }
 
 resource "google_project_iam_member" "data_engineering_cloudfunctions" {
   project = var.project_id
   role    = "roles/cloudfunctions.developer"
+  member  = "serviceAccount:${google_service_account.data_engineering.email}"
+}
+
+resource "google_project_iam_member" "data_engineering_cloudrun" {
+  project = var.project_id
+  role    = "roles/run.invoker"
   member  = "serviceAccount:${google_service_account.data_engineering.email}"
 }
