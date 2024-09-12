@@ -45,9 +45,11 @@ terraform apply -var-file=terraform.tfvars
 ### 2.1 Ingest data
 
 ```bash
-curl -m 310 -X POST https://<fn_ingest_data_url> -H "Authorization: bearer $(gcloud auth print-identity-token)" -H "Content-Type: application/json" -d '{
-    "product_id": "12345",
-    "product_name": "Laptop",
+curl -m 310 -X POST https://<fn_ingest_data_url> \
+-H "Authorization: bearer $(gcloud auth print-identity-token)" -H "Content-Type: application/json" \
+-d '{
+    "product_id": "45678",
+    "product_name": "Laptop 2",
     "category": "Electronics",
     "unit_price": 999.99,
     "supplier": "TechSupplier Inc."
@@ -57,5 +59,7 @@ curl -m 310 -X POST https://<fn_ingest_data_url> -H "Authorization: bearer $(gcl
 ### 2.2 Query data
 
 ```bash
-<TODO>
+curl -m 310 -X POST https://us-central1-devops-sandbox-350820.cloudfunctions.net/fetch-data \
+-H "Authorization: bearer $(gcloud auth print-identity-token)" -H "Content-Type: application/json" \
+-d '{}'
 ```
