@@ -13,7 +13,7 @@ env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} 
     GCP_REGION: ${{ secrets.GCP_REGION }}
-    GCP_CREDENTIALS_JSON: ${{ secrets.GCP_CREDENTIALS_JSON }}
+    GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/credentials.json 
     GCP_ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
 jobs:
     check-terraform-code:
@@ -30,11 +30,9 @@ jobs:
             - name: Set up gcloud Cloud SDK environment
               uses: google-github-actions/setup-gcloud@v2.1.1
             - name: Authenticate to GCP
-              env:
-                GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GCP_CREDENTIALS_JSON }}
               run: |
-                echo "${GOOGLE_APPLICATION_CREDENTIALS}" > ${{ github.workspace }}/gcp-key.json
-                gcloud auth activate-service-account --key-file=${{ github.workspace }}/gcp-key.json
+                echo "${{ secrets.GCP_CREDENTIALS_JSON }}" > ${{ github.workspace }}/credentials.json            
+                gcloud auth activate-service-account --key-file=${{ github.workspace }}/credentials.json
                 gcloud config set project ${{ env.GCP_PROJECT_ID }}  # Reemplaza con tu ID de proyecto
             - name: Terraform Init
               run: terraform init
