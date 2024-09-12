@@ -9,10 +9,16 @@ on:
     branches:
       - main
       - develop
+env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} 
+    GCP_REGION: ${{ secrets.GCP_REGION }}
+    GCP_ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
 jobs:
     check-terraform-code:
         name: Check Terraform Code
         runs-on: ubuntu-latest
+        environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
