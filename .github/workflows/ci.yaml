@@ -31,7 +31,7 @@ jobs:
               uses: google-github-actions/setup-gcloud@v2.1.1
             - name: Authenticate to GCP
               run: |
-                echo "${{ secrets.GCP_CREDENTIALS_JSON }}" > ${{ github.workspace }}/credentials.json            
+                echo ${{ secrets.GCP_CREDENTIALS_JSON }} > ${{ github.workspace }}/credentials.json            
                 gcloud auth activate-service-account --key-file=${{ github.workspace }}/credentials.json
                 gcloud config set project ${{ env.GCP_PROJECT_ID }}  # Reemplaza con tu ID de proyecto
             - name: Terraform Init
