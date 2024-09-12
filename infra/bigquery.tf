@@ -11,8 +11,9 @@ resource "google_bigquery_dataset" "ecommerce_analytics" {
 
 # Bigquery table "ecommerce_analytics.sales"
 resource "google_bigquery_table" "product_sales_table" {
-  dataset_id = google_bigquery_dataset.ecommerce_analytics.dataset_id
-  table_id   = "product_sales"
+  dataset_id          = google_bigquery_dataset.ecommerce_analytics.dataset_id
+  table_id            = "product_sales"
+  deletion_protection = true
   time_partitioning {
     type = "DAY"
   }
