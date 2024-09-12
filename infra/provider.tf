@@ -6,8 +6,8 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket  = "350820-terraform-state"
-    prefix  = "terraform/state"
+    bucket = "350820-terraform-state"
+    prefix = "terraform/state"
   }
 }
 
