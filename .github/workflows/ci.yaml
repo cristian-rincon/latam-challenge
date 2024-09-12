@@ -1,0 +1,45 @@
+name: Continuous Integration
+run-name: CI
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+        - develop
+jobs:
+    check-terraform-code:
+        name: Check Terraform Code
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v1
+              with:
+                  terraform_version: 1.8.1
+            - name: Terraform Format
+              run: terraform fmt -check
+              working-directory: ./infra
+            - name: Terraform Validate
+              run: terraform validate
+              working-directory: ./infra
+            - name: Terraform Plan
+              run: terraform plan
+              working-directory: ./infra
+    # check-python-code:
+    #     name: Check Python Code
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: Checkout code
+    #           uses: actions/checkout@v2
+    #         - name: Setup Python
+    #           uses: actions/setup-python@v2
+    #           with:
+    #               python-version: 3.9
+    #         - name: Install dependencies
+    #           run: pip install -r requirements.txt
+    #         - name: Run tests
+    #           run: pytest
