@@ -22,7 +22,7 @@
 - Cloud Functions API
 - Pub/Sub API
 - Bigquery API
-- IAM API
+- Identity and Access Management (IAM) API
 
 ## 1. Deploy infrastructure
 
