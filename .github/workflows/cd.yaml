@@ -49,27 +49,5 @@ jobs:
           TF_VAR_environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
           TF_VAR_project_id: ${{ env.GCP_PROJECT_ID }}
           TF_VAR_region: ${{ env.GCP_REGION }}
-      - name: Set GitHub Environment
-        id: set_environment
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const environment = '${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}';
-            const context = require('@actions/github').context;
-            const response = await github.request(`POST /repos/${context.repo.owner}/${context.repo.repo}/deployments`, {
-                ref: context.ref,
-                environment: environment,
-                description: `Deploying to ${environment} environment`,
-            });
-            return response.data.id;
-      - name: GitHub Deployment Status
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const deployment_id = '${{ steps.set_environment.outputs.result }}';
-            await github.request(`POST /repos/${context.repo.owner}/${context.repo.repo}/deployments/${deployment_id}/statuses`, {
-                state: 'success',
-                description: 'Deployment completed successfully',
-            });
       - name: Terraform Output
         run: terraform output

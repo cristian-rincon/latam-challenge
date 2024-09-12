@@ -23,6 +23,7 @@
 - Pub/Sub API
 - Bigquery API
 - Identity and Access Management (IAM) API
+- Cloud Resource Manager API
 
 ## 1. Deploy infrastructure
 
