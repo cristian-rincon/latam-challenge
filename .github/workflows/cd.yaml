@@ -1,9 +1,11 @@
+---
 name: CD
 on:
   workflow_run:
     workflows: ["CI"]  # Nombre del workflow CI
     types:
       - completed
+    branches: [main, develop]
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -16,6 +18,7 @@ jobs:
     name: Apply Terraform
     runs-on: ubuntu-latest
     environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
