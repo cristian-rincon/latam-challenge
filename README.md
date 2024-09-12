@@ -99,4 +99,4 @@ Additionally, the following environment secrets must be created:
 
 GCP_PROJECT_ID: <the project id where you want to deploy the infrastructure>
 GCP_REGION: <the region where you want to deploy the infrastructure>
-GCP_TERRAFORM_SA_KEY: <the service account that you have created with enough permissions to create/manage the infrastructure resources>
+GCP_CREDENTIALS_JSON: <the service account that you have created with enough permissions to create/manage the infrastructure resources>
