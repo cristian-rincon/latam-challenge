@@ -59,7 +59,7 @@ curl -m 310 -X POST https://<fn_ingest_data_url> \
 ### 2.2 Query data
 
 ```bash
-curl -m 310 -X POST https://us-central1-devops-sandbox-350820.cloudfunctions.net/fetch-data \
+curl -m 310 -X POST https://<fn_fetch_data_url> \
 -H "Authorization: bearer $(gcloud auth print-identity-token)" -H "Content-Type: application/json" \
 -d '{}'
 ```
