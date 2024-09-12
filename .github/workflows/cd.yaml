@@ -13,6 +13,7 @@ env:
     GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} 
     GCP_REGION: ${{ secrets.GCP_REGION }}
     GCP_ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+    GCP_CREDENTIALS_JSON: ${{ secrets.GCP_CREDENTIALS_JSON }}
 jobs:
     apply:
         name: Apply Terraform
@@ -25,6 +26,22 @@ jobs:
               uses: hashicorp/setup-terraform@v1
               with:
                   terraform_version: 1.8.1
+            - name: Install Google Cloud SDK
+              run: |
+                echo "Installing Google Cloud SDK..."
+                sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates gnupg
+                echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+                sudo apt-get install -y curl
+                curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo tee /usr/share/keyrings/cloud.google.gpg
+                sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+        
+            - name: Authenticate to GCP
+              env:
+                GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GCP_CREDENTIALS_JSON }}
+              run: |
+                echo "${GOOGLE_APPLICATION_CREDENTIALS}" > ${{ github.workspace }}/gcp-key.json
+                gcloud auth activate-service-account --key-file=${{ github.workspace }}/gcp-key.json
+                gcloud config set project ${{ env.GCP_PROJECT_ID }}  # Reemplaza con tu ID de proyecto
             - name: Terraform Init
               run: terraform init
               working-directory: ./infra
