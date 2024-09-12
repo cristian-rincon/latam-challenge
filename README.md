@@ -90,13 +90,16 @@ Required roles: Admin (See [how to manage access to service accounts](https://cl
 
 ### 3.1 GitHub Actions Pre-Requisites
 
-You need to create the following environments in your repository: 
+You need to create the following environments in your repository:
 
 - development
 - production
 
-Additionally, the following environment secrets must be created: 
+Additionally, the following environment secrets must be created:
 
 GCP_PROJECT_ID: <the project id where you want to deploy the infrastructure>
 GCP_REGION: <the region where you want to deploy the infrastructure>
 GCP_CREDENTIALS_JSON: <the service account that you have created with enough permissions to create/manage the infrastructure resources>
+
+Next, you will need to create a bucket to store the terraform state securely. See the following [documentation](https://cloud.google.com/docs/terraform/resource-management/store-state) to
+store the state in a remote backend.
