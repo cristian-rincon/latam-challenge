@@ -1,19 +1,9 @@
 name: CD
 on:
   workflow_run:
-    workflows:
-      - CI
+    workflows: ["CI"]  # Nombre del workflow CI
     types:
       - completed
-    branches:
-      - main
-      - develop
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to deploy'
-        required: true
-        default: 'development'
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
