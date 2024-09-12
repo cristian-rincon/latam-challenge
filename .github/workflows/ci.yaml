@@ -36,7 +36,7 @@ jobs:
               run: |
                 echo "${GCP_CREDENTIALS_JSON}" > ${{ github.workspace }}/credentials.json            
                 gcloud auth activate-service-account --key-file=${{ github.workspace }}/credentials.json
-                gcloud config set project ${{ env.GCP_PROJECT_ID }}  # Reemplaza con tu ID de proyecto
+                gcloud config set project ${{ env.GCP_PROJECT_ID }}  
             - name: Terraform Init
               run: terraform init
               working-directory: ./infra

@@ -27,63 +27,45 @@ jobs:
       - name: Set up gcloud Cloud SDK environment
         uses: google-github-actions/setup-gcloud@v2.1.1
       - name: Authenticate to GCP
-        run: >
-          echo "${GCP_CREDENTIALS_JSON}" > ${{ github.workspace
-          }}/credentials.json
-
-          gcloud auth activate-service-account --key-file=${{ github.workspace
-          }}/credentials.json
-
-          gcloud config set project ${{ env.GCP_PROJECT_ID }}  # Reemplaza con
-          tu ID de proyecto
+        run: |
+          echo "${GCP_CREDENTIALS_JSON}" > ${{ github.workspace }}/credentials.json            
+          gcloud auth activate-service-account --key-file=${{ github.workspace }}/credentials.json
+          gcloud config set project ${{ env.GCP_PROJECT_ID }} 
       - name: Terraform Init
         run: terraform init
         working-directory: ./infra
       - name: Terraform Plan
-        id: plan
-        run: terraform plan -out=tfplan
+        run: terraform plan
+        working-directory: ./infra
         env:
-          TF_VAR_environment: >-
-            ${{ github.ref == 'refs/heads/main' && 'production' || 'development'
-            }}
+          TF_VAR_environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
           TF_VAR_project_id: ${{ github.ref == 'refs/heads/main' && env.GCP_PROJECT_ID }}
           TF_VAR_region: ${{ env.GCP_REGION }}
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GCP_CREDENTIALS_JSON }}
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
         env:
-          TF_VAR_environment: >-
-            ${{ github.ref == 'refs/heads/main' && 'production' || 'development'
-            }}
+          TF_VAR_environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
           TF_VAR_project_id: ${{ github.ref == 'refs/heads/main' && env.GCP_PROJECT_ID }}
           TF_VAR_region: ${{ env.GCP_REGION }}
       - name: Set GitHub Environment
         id: set_environment
         uses: actions/github-script@v6
         with:
-          script: >
-            const environment = '${{ github.ref == 'refs/heads/main' &&
-            'production' || 'development' }}';
-
+          script: |
+            const environment = '${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}';
             const context = require('@actions/github').context;
-
-            const response = await github.request(`POST
-            /repos/${context.repo.owner}/${context.repo.repo}/deployments`, {
+            const response = await github.request(`POST /repos/${context.repo.owner}/${context.repo.repo}/deployments`, {
                 ref: context.ref,
                 environment: environment,
                 description: `Deploying to ${environment} environment`,
             });
-
             return response.data.id;
       - name: GitHub Deployment Status
         uses: actions/github-script@v6
         with:
-          script: >
+          script: |
             const deployment_id = '${{ steps.set_environment.outputs.result }}';
-
-            await github.request(`POST
-            /repos/${context.repo.owner}/${context.repo.repo}/deployments/${deployment_id}/statuses`,
-            {
+            await github.request(`POST /repos/${context.repo.owner}/${context.repo.repo}/deployments/${deployment_id}/statuses`, {
                 state: 'success',
                 description: 'Deployment completed successfully',
             });
