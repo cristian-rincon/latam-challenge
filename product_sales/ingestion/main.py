@@ -1,32 +1,43 @@
 import json
-from google.cloud import pubsub_v1
-from flask import jsonify, request
 import os
 
+from flask import jsonify, request
+from google.cloud import pubsub_v1
+
 # Define variables de entorno para el proyecto y el nombre del topic
-PROJECT_ID = os.getenv('GCP_PROJECT')
-PUBSUB_TOPIC = os.getenv('PUBSUB_TOPIC')
+PROJECT_ID = os.getenv("GCP_PROJECT")
+PUBSUB_TOPIC = os.getenv("PUBSUB_TOPIC")
+
 
 def ingest_data(request):
-    """Cloud Function para enviar datos dinámicos a una suscripción de Pub/Sub"""
-    
+    """Cloud Function para enviar datos dinámicos a una suscripción de Pub/Sub"""  # noqa
+
     # Verificar si la solicitud es POST y tiene un cuerpo
-    if request.method != 'POST':
+    if request.method != "POST":
         return jsonify({"error": "Método no permitido. Usa POST."}), 405
 
     try:
         # Leer el cuerpo de la solicitud y convertir a JSON
         request_json = request.get_json()
-        
+
         # Validar que el cuerpo de la solicitud tenga los campos necesarios
-        required_fields = ["product_id", "product_name", "category", "unit_price", "supplier"]
+        required_fields = [
+            "product_id",
+            "product_name",
+            "category",
+            "unit_price",
+            "supplier",
+        ]
         for field in required_fields:
             if field not in request_json:
-                return jsonify({"error": f"Falta el campo requerido: {field}"}), 400
-        
+                return (
+                    jsonify({"error": f"Falta el campo requerido: {field}"}),
+                    400,
+                )  # noqa
+
         # Convertir los datos a formato JSON
         message_json = json.dumps(request_json)
-        message_bytes = message_json.encode('utf-8')
+        message_bytes = message_json.encode("utf-8")
 
         # Publicar mensaje en el topic de Pub/Sub
         publisher = pubsub_v1.PublisherClient()
@@ -38,5 +49,20 @@ def ingest_data(request):
         return jsonify({"message": "Mensaje publicado con éxito."}), 200
 
     except Exception as e:
-        print(f'Error al publicar mensaje: {e}')
+        print(f"Error al publicar mensaje: {e}")
         return jsonify({"error": str(e)}), 500
+
+
+# For testing purposes
+if __name__ == "__main__":
+    from flask import Flask
+
+    app = Flask(__name__)
+
+    # Define la ruta para manejar la función `ingest_data`
+    @app.route("/ingest_data", methods=["POST"])
+    def handle_ingest_data():
+        return ingest_data(request)
+
+    # Ejecutar la aplicación Flask en el puerto 8080
+    app.run(host="0.0.0.0", port=8080)

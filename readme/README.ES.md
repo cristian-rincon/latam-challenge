@@ -1,5 +1,8 @@
 # latam-challenge
 
+[![CI](https://github.com/cristian-rincon/latam-challenge/actions/workflows/ci.yaml/badge.svg)](https://github.com/cristian-rincon/latam-challenge/actions/workflows/ci.yaml)
+[![CD](https://github.com/cristian-rincon/latam-challenge/actions/workflows/cd.yaml/badge.svg)](https://github.com/cristian-rincon/latam-challenge/actions/workflows/cd.yaml)
+
 ## Contents
 
 - [latam-challenge](#latam-challenge)
