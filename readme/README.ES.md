@@ -102,6 +102,10 @@ En caso de que desee realizar pruebas desde local, usted (o una cuenta de servic
 
 ## 1. Infraestructura
 
+A continuación, el diagrama de la arquitectura propuesta:
+
+![Architecture Diagram](../assets/architecture-v1.png)
+
 ### 1.1 Inicialización
 
 > **Importante:** probado con Terraform v1.8.1
