@@ -40,3 +40,18 @@ def ingest_data(request):
     except Exception as e:
         print(f'Error al publicar mensaje: {e}')
         return jsonify({"error": str(e)}), 500
+
+
+# For testing purposes
+if __name__ == "__main__":
+    from flask import Flask
+
+    app = Flask(__name__)
+
+    # Define la ruta para manejar la función `ingest_data`
+    @app.route('/ingest_data', methods=['POST'])
+    def handle_ingest_data():
+        return ingest_data(request)
+
+    # Ejecutar la aplicación Flask en el puerto 8080
+    app.run(host='0.0.0.0', port=8080)

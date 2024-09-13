@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "product-sales"
+version = "0.1.0"
+description = ""
+authors = ["cristian-rincon <cristian.o.rincon.b@gmail.com>"]
+readme = "README.md"
+
+packages = [
+    { include = "ingestion", from = "." },
+    { include = "fetch", from = "." },
+    { include = "tests", from = "." },
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+
+[tool.poetry.group.dev.dependencies]
+google-cloud-bigquery = "^3.25.0"
+google-cloud-pubsub = "^2.23.1"
+flask = "^3.0.3"
+unittest2 = "^1.1.0"
+mock = "^5.1.0"
+requests = "^2.32.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
