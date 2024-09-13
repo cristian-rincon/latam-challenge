@@ -25,7 +25,7 @@
 - Identity and Access Management (IAM) API
 - Cloud Resource Manager API
 
-## 1. Deploy infrastructure
+## 1. Infrastructure
 
 ### 1.1 Initialization
 
@@ -55,9 +55,19 @@ terraform plan -var-file=terraform.tfvars
 terraform apply -var-file=terraform.tfvars
 ```
 
-## 2. Test the deployed infrastructure
+## 2. Applications and CI/CD flow
 
-### 2.1 Ingest data
+
+
+### 2.1 Ingest data (HTTP API)
+
+The data ingestion process is handled by a Cloud Function (HTTP), which triggers a Pub/Sub topic. The subscribed service then streams the incoming data into a BigQuery table for storage and analysis.
+
+The Cloud function is deployed by Terraform, in a CD process orchestrated by GitHub Actions workflows. See details [here](<TOOD>)
+
+Source code: /product_sales/ingestion
+
+Request example:
 
 ```bash
 curl -m 310 -X POST https://<fn_ingest_data_url> \
