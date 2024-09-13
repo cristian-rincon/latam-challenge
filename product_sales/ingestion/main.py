@@ -10,7 +10,7 @@ PUBSUB_TOPIC = os.getenv("PUBSUB_TOPIC")
 
 
 def ingest_data(request):
-    """Cloud Function para enviar datos dinámicos a una suscripción de Pub/Sub""" # noqa
+    """Cloud Function para enviar datos dinámicos a una suscripción de Pub/Sub"""  # noqa
 
     # Verificar si la solicitud es POST y tiene un cuerpo
     if request.method != "POST":
@@ -30,7 +30,10 @@ def ingest_data(request):
         ]
         for field in required_fields:
             if field not in request_json:
-                return jsonify({"error": f"Falta el campo requerido: {field}"}), 400 # noqa
+                return (
+                    jsonify({"error": f"Falta el campo requerido: {field}"}),
+                    400,
+                )  # noqa
 
         # Convertir los datos a formato JSON
         message_json = json.dumps(request_json)
