@@ -53,17 +53,41 @@ jobs:
                 TF_VAR_environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
                 TF_VAR_project_id: ${{ env.GCP_PROJECT_ID }}
                 TF_VAR_region: ${{ env.GCP_REGION }}
-    # check-python-code:
-    #     name: Check Python Code
-    #     runs-on: ubuntu-latest
-    #     steps:
-    #         - name: Checkout code
-    #           uses: actions/checkout@v2
-    #         - name: Setup Python
-    #           uses: actions/setup-python@v2
-    #           with:
-    #               python-version: 3.9
-    #         - name: Install dependencies
-    #           run: pip install -r requirements.txt
-    #         - name: Run tests
-    #           run: pytest
+    check-python-code:
+        name: Check Python Code
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v3 
+
+          - uses: actions/setup-python@v4    
+            with:      
+              python-version: "3.10"  
+
+          - uses: Gr1N/setup-poetry@v8    
+            with:      
+              poetry-version: "1.8.3"
+
+          - name: Check Poetry Installation
+            run: poetry --version
+            working-directory: ./product_sales
+
+          - name: Install dependencies
+            run: poetry install
+            working-directory: ./product_sales
+
+          - name: Check Python Code Style
+            run: poetry run black --check .
+            working-directory: ./product_sales
+
+          - name: Check Python Code Formatting
+            run: poetry run isort --check .
+            working-directory: ./product_sales
+          
+          - name: Check Python Code Linting
+            run: poetry run flake8 .
+            working-directory: ./product_sales
+
+          - name: Unit tests
+            run: poetry run python -m unittest discover tests
+            working-directory: ./product_sales
+          
