@@ -104,6 +104,10 @@ If you wish to perform local testing, you (or a service account) must have suffi
 
 ## 1. Infrastructure
 
+This is the diagram for the proposed Architecture:
+
+![Architecture Diagram](./assets/architecture-v1.png)
+
 ### 1.1 Initialization
 
 > **Important:** Tested with Terraform v1.8.1
