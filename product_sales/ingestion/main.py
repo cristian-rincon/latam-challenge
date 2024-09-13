@@ -51,4 +51,3 @@ def ingest_data(request):
     except Exception as e:
         print(f"Error al publicar mensaje: {e}")
         return jsonify({"error": str(e)}), 500
-
