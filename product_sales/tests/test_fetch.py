@@ -4,14 +4,14 @@ from unittest.mock import MagicMock, patch
 
 from flask import Flask
 
-from fetch.main import fetch_data  # Importa la función que creaste
+from fetch.main import fetch_data
 
 
 class TestCloudFunction(unittest.TestCase):
 
     @patch("fetch.main.bigquery.Client")  # Mock BigQuery client
     def test_fetch_data(self, mock_bigquery_client):
-        # Simular los resultados de la consulta de BigQuery
+        # Mock the query job and results
         mock_query_job = MagicMock()
         mock_results = [
             MagicMock(
@@ -32,19 +32,19 @@ class TestCloudFunction(unittest.TestCase):
         mock_query_job.result.return_value = mock_results
         mock_bigquery_client.return_value.query.return_value = mock_query_job
 
-        # Crear una aplicación Flask de prueba para simular solicitudes HTTP
+        # Create a Flask app context for testing
         app = Flask(__name__)
 
         with app.test_request_context("/fetch_data"):
             response, status_code = fetch_data(None)
 
-            # Verificar que la función devolvió el estado correcto
+            # Verify the response status code
             self.assertEqual(status_code, 200)
 
-            # Convertir la respuesta a JSON para verificar su contenido
+            # Convert the response data to JSON format
             data = json.loads(response.get_data(as_text=True))
 
-            # Verificar que la respuesta contenga los datos esperados
+            # Verify the response data
             self.assertEqual(len(data), 2)
             self.assertEqual(data[0]["product_id"], 1)
             self.assertEqual(data[0]["product_name"], "Product A")

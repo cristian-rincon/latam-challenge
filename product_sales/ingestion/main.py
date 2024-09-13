@@ -12,15 +12,15 @@ PUBSUB_TOPIC = os.getenv("PUBSUB_TOPIC")
 def ingest_data(request):
     """Cloud Function para enviar datos dinámicos a una suscripción de Pub/Sub"""  # noqa
 
-    # Verificar si la solicitud es POST y tiene un cuerpo
+    # Check if the request method is POST
     if request.method != "POST":
         return jsonify({"error": "Método no permitido. Usa POST."}), 405
 
     try:
-        # Leer el cuerpo de la solicitud y convertir a JSON
+        # Read the JSON data from the request body
         request_json = request.get_json()
 
-        # Validar que el cuerpo de la solicitud tenga los campos necesarios
+        # Validate the required fields
         required_fields = [
             "product_id",
             "product_name",
@@ -35,16 +35,16 @@ def ingest_data(request):
                     400,
                 )  # noqa
 
-        # Convertir los datos a formato JSON
+        # Convert the data to JSON format
         message_json = json.dumps(request_json)
         message_bytes = message_json.encode("utf-8")
 
-        # Publicar mensaje en el topic de Pub/Sub
+        # Publish the message to the Pub/Sub topic
         publisher = pubsub_v1.PublisherClient()
         topic_path = publisher.topic_path(PROJECT_ID, PUBSUB_TOPIC)
 
         future = publisher.publish(topic_path, data=message_bytes)
-        future.result()  # Esperar a que el mensaje sea publicado
+        future.result()  # Wait for the message to be published
 
         return jsonify({"message": "Mensaje publicado con éxito."}), 200
 
@@ -52,17 +52,3 @@ def ingest_data(request):
         print(f"Error al publicar mensaje: {e}")
         return jsonify({"error": str(e)}), 500
 
-
-# For testing purposes
-if __name__ == "__main__":
-    from flask import Flask
-
-    app = Flask(__name__)
-
-    # Define la ruta para manejar la función `ingest_data`
-    @app.route("/ingest_data", methods=["POST"])
-    def handle_ingest_data():
-        return ingest_data(request)
-
-    # Ejecutar la aplicación Flask en el puerto 8080
-    app.run(host="0.0.0.0", port=8080)
