@@ -1,7 +1,7 @@
 import json
 import os
 
-from flask import jsonify, request
+from flask import jsonify
 from google.cloud import pubsub_v1
 
 # Define variables de entorno para el proyecto y el nombre del topic
