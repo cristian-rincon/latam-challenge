@@ -22,6 +22,10 @@ flask = "^3.0.3"
 unittest2 = "^1.1.0"
 mock = "^5.1.0"
 requests = "^2.32.3"
+black = "^24.8.0"
+isort = "^5.13.2"
+autoflake = "^2.3.1"
+flake8 = "^7.1.1"
 
 [build-system]
 requires = ["poetry-core"]
